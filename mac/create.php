@@ -21,6 +21,7 @@ $actualProb = "";
 $actionTaken = "";
 $techNum = "";
 $skidata = "";
+$isOpen = "";
 
 $errorMessage = "";
 $successMessage = "";
@@ -36,19 +37,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $actionTaken = $_POST["actionTaken"];
     $techNum = $_POST["techNum"];
     $skidata = $_POST["skidata"];
+    $isOpen = $_POST["isOpen"];
 
     do {
         if ($dateOf === '' || $lane === '' || $reportTime === '' || $startTime === '' || $stopTime === ''
         || $reportProb === '' || $actualProb === '' || $actionTaken === '' || $techNum === ''
-        || $skidata === '') {
+        || $skidata === '' || $isOpen === '') {
             $errorMessage = "All the fields are required";
             break;
         }
 
         // Adding new client to DB
         $sql = "INSERT INTO techlog (dateOf, lane, reportTime, startTime, stopTime, reportProb, actualProb, 
-        actionTaken, techNum, skidata) " . "VALUES ('$dateOf', '$lane', '$reportTime', '$startTime', '$stopTime', 
-        '$reportProb', '$actualProb', '$actionTaken', '$techNum', '$skidata')";
+        actionTaken, techNum, skidata, isOpen) " . "VALUES ('$dateOf', '$lane', '$reportTime', '$startTime', '$stopTime', 
+        '$reportProb', '$actualProb', '$actionTaken', '$techNum', '$skidata', '$isOpen')";
         $result = $connection->query($sql);
 
         // Display error message if query fails
@@ -68,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $actionTaken = "";
         $techNum = "";
         $skidata = "";
+        $isOpen = "";
 
         $successMessage = "Client added correctly";
 
@@ -173,6 +176,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <select class="form-control" name="skidata">
                         <option value="1" <?php echo ($skidata == '1') ? 'selected' : ''; ?>>Yes</option>
                         <option value="0" <?php echo ($skidata == '0') ? 'selected' : ''; ?>>No</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Is the ticket still open option -->
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Ticket Status</label>
+                <div class="col-sm-6">
+                    <select class="form-control" name="isOpen">
+                        <option value="1" <?php echo ($skidata == '1') ? 'selected' : ''; ?>>Open</option>
+                        <option value="0" <?php echo ($skidata == '0') ? 'selected' : ''; ?>>Closed</option>
                     </select>
                 </div>
             </div>

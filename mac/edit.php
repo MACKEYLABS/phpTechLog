@@ -26,6 +26,7 @@ $actualProb = "";
 $actionTaken = "";
 $techNum = "";
 $skidata = "";
+$isOpen = "";
 
 $errorMessage = "";
 $successMessage = "";
@@ -59,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $actionTaken = $row["actionTaken"];
     $techNum = $row["techNum"];
     $skidata = $row["skidata"];
+    $isOpen = $row["isOpen"];
 }
 else {
     //Post Method: Update the data of the client
@@ -73,6 +75,7 @@ else {
     $actionTaken = $_POST["actionTaken"];
     $techNum = $_POST["techNum"];
     $skidata = $_POST["skidata"];
+    $isOpen = $_POST["isOpen"];
 
     // Check if skidata value is neither 0 nor 1
     if ($skidata !== "0" && $skidata !== "1") {
@@ -82,7 +85,7 @@ else {
     do {
         if ($dateOf === '' || $lane === '' || $reportTime === '' || $startTime === '' || $stopTime === ''
         || $reportProb === '' || $actualProb === '' || $actionTaken === '' || $techNum === ''
-        || $skidata === '') {
+        || $skidata === '' || $isOpen === '') {
             $errorMessage = "All the fields are required";
             break;
         }
@@ -91,7 +94,7 @@ else {
         $sql = "UPDATE techlog " . 
             "SET dateOf = '$dateOf', lane = '$lane', reportTime = '$reportTime', startTime = '$startTime', 
             stopTime = '$stopTime', reportProb = '$reportProb', actualProb = '$actualProb', 
-            actionTaken = '$actionTaken', techNum = '$techNum', skidata = '$skidata' " . 
+            actionTaken = '$actionTaken', techNum = '$techNum', skidata = '$skidata', isOpen = '$isOpen' " . 
             "WHERE id = $id";
 
         // Check to see if query was successfully ran    
@@ -212,9 +215,16 @@ else {
                     </select>
                 </div>
             </div>
-            
-                        
-                    
+            <!-- Ticket Open Dropdown -->
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Ticket Status</label>
+                <div class="col-sm-6">
+                    <select class="form-control" name="isOpen">
+                        <option value="1" <?php echo ($skidata == '1') ? 'selected' : ''; ?>>Open</option>
+                        <option value="0" <?php echo ($skidata == '0') ? 'selected' : ''; ?>>Closed</option>
+                    </select>
+                </div>
+            </div>
 
             <?php
             if (!empty($successMessage)) {
