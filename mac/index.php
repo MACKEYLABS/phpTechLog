@@ -49,6 +49,11 @@
         table {
             width: 100%;
         }
+
+        .open-ticket {
+            background-color: yellow;
+        }
+
     </style>
 </head>
 
@@ -62,9 +67,11 @@
             </a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
+                    <!--  Link to creting new tech log -->
                     <li class="nav-item">
-                        <a class="nav-link" href="/path_to_new_techlog.php">Start New Techlog</a>
+                    <a class="nav-link" href="/mac/newtechlog.php" onclick="return confirm('Are you sure you want to start a new tech log? This will move current records to the historical archive.');">Start New Techlog</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="/path_to_reports.php">Reports</a>
                     </li>
@@ -80,10 +87,10 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>STATUS</th>
                     <th>DATE</th>
                     <th>LANE</th>
-                    <th>TIME REPORTED</th>
+                    <th>REPORT TIME</th>
                     <th>START TIME</th>
                     <th>STOP TIME</th>
                     <th>REPORTED ISSUE</th>
@@ -91,19 +98,13 @@
                     <th>ACTION TAKEN</th>
                     <th>TECH</th>
                     <th>CONTACT SKIDATA</th>
-                    <th>STATUS</th>
                     <th>ACTIONS</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $servername = "localhost";
-                $username = "root";
-                $password = "";
-                $database = "mcodb";
-
-                //Create connection
-                $connection = new mysqli($servername, $username, $password, $database);
+                
+                include 'config.php';
 
                 //Check connection
                 if ($connection->connect_error) {
@@ -121,20 +122,23 @@
 
                 //Read data of each row
                 while ($row = $result->fetch_assoc()) {
+                $rowClass = $row['isOpen'] == '1' ? 'Open' : '';
                 echo "
-                <tr>
-                    <td>$row[id]</td>
+                <tr class='$rowClass'>
+                    <td>
+                    " . ($row['isOpen'] == '1' ? '<span class="badge bg-warning">Open</span>' : '<span class="badge bg-success">Closed</span>') . "
+                    </td>
                     <td>$row[dateOf]</td>
                     <td>$row[lane]</td>
-                    <td>$row[reportTime]</td>
-                    <td>$row[startTime]</td>
-                    <td>$row[stopTime]</td>
+                    <td>" . substr($row['reportTime'], 0, 5) . "</td>
+                    <td>" . substr($row['startTime'], 0, 5) . "</td>
+                    <td>" . substr($row['stopTime'], 0, 5) . "</td>
                     <td>$row[reportProb]</td>
                     <td>$row[actualProb]</td>
                     <td>$row[actionTaken]</td>
                     <td>$row[techNum]</td>
                     <td>" . ($row['skidata'] == '1' ? 'Yes' : 'No') . "</td>
-                    <td>" . ($row['isOpen'] == '1' ? 'Open' : 'Closed') . "</td>
+                    
                     <td>
                         <a class='btn btn-primary btn-sm' href='/mac/edit.php?id=$row[id]'><i class='fas fa-edit'></i></a>
                         <a class='btn btn-danger btn-sm' href='/mac/delete.php?id=$row[id]'><i class='fas fa-trash-alt'></i></a>                        

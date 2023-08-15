@@ -3,14 +3,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Database connection
-$servername= "localhost";
-$username = "root";
-$password = "";
-$database = "mcodb";
+include 'config.php';
 
-// Create connection
-$connection = new mysqli($servername, $username, $password, $database);
 if ($connection->connect_error) {
     die("Connection failed: " . $connection->connect_error);
 }
@@ -220,8 +214,8 @@ else {
                 <label class="col-sm-3 col-form-label">Ticket Status</label>
                 <div class="col-sm-6">
                     <select class="form-control" name="isOpen">
-                        <option value="1" <?php echo ($skidata == '1') ? 'selected' : ''; ?>>Open</option>
-                        <option value="0" <?php echo ($skidata == '0') ? 'selected' : ''; ?>>Closed</option>
+                        <option value="1" <?php echo ($isOpen == '1') ? 'selected' : ''; ?>>Open</option>
+                        <option value="0" <?php echo ($isOpen == '0') ? 'selected' : ''; ?>>Closed</option>
                     </select>
                 </div>
             </div>
