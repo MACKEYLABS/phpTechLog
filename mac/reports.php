@@ -33,6 +33,21 @@ if (isset($_POST['search'])) {
         die("Invalid query: " . $connection->error);
     }
 }
+    if ($result && $result->num_rows > 0 && isset($_POST['export']) && $_POST['export'] === 'csv') {
+        header('Content-Type: text/csv');
+        $filename = "MCO TECHLOG " . date('m-d-Y') . ".csv";
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+
+        $output = fopen('php://output', 'w');
+        fputcsv($output, ['STATUS', 'DATE', 'LANE', 'REPORT TIME', 'START TIME', 'STOP TIME', 'REPORTED ISSUE', 'ACTUAL ISSUE', 'ACTION TAKEN', 'TECH', 'CONTACT SKIDATA']);
+
+        while ($row = $result->fetch_assoc()) {
+            // ... Same code for extracting and writing data ...
+            }
+
+    fclose($output);
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -134,8 +149,8 @@ if (isset($_POST['search'])) {
 
     <div class="container my-4">
     <?php if (!is_null($result) && $result->num_rows > 0): ?>
-    <h3>Search Results:</h3>
-    <table class="table table-bordered table-striped">
+        <h3>Search Results:</h3>
+        <table class="table table-bordered table-striped" id="resultsTable">
         <thead>
             <tr>
                 <th>STATUS</th>
@@ -163,22 +178,86 @@ if (isset($_POST['search'])) {
             </td>
             <td><?php echo $row["dateOf"]; ?></td>
             <td><?php echo $row["lane"]; ?></td>
-            <td><?php echo $row['reportTime']; ?></td> <!-- Display as DATETIME -->
-            <td><?php echo $row['startTime']; ?></td>  <!-- Display as DATETIME -->
-            <td><?php echo $row['stopTime']; ?></td>   <!-- Display as DATETIME -->
+            <td><?php echo $row['reportTime']; ?></td>
+            <td><?php echo $row['startTime']; ?></td>  
+            <td><?php echo $row['stopTime']; ?></td>   
             <td><?php echo $row["reportProb"]; ?></td>
             <td><?php echo $row["actualProb"]; ?></td>
             <td><?php echo $row["actionTaken"]; ?></td>
             <td><?php echo $row["techNum"]; ?></td>
             <td><?php echo ($row['skidata'] == '1') ? 'Yes' : 'No'; ?></td>
         </tr>
-<?php endwhile; ?>
-
+    <?php endwhile; ?>
         </tbody>
     </table>
+
     <?php elseif (isset($result)): ?>
-    <p>No results found for your search criteria.</p>
+        <p>No results found for your search criteria.</p>
+    <?php endif; ?>
+
+    <!-- ... Your table code ... -->
+    <?php if (!is_null($result) && $result->num_rows > 0): ?>
+        <div class="my-3">
+        <label for="exportFormat">Export as:</label>
+            <select id="exportFormat" name="exportFormat">
+                <option value="csv">CSV</option>
+                <option value="pdf">PDF</option>
+            </select>
+            <button onclick="exportTable()">Export</button>
+        </div>
     <?php endif; ?>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+    function exportTable() {
+        const format = document.getElementById('exportFormat').value;
+        if (format === 'csv') {
+        
+            let form = document.createElement("form");
+            form.method = "POST";
+            form.action = "/mac/reports.php";
+
+            let input = document.createElement("input");
+            input.name = "export";
+            input.value = "csv";
+            form.appendChild(input);
+
+            // Add the existing search values as hidden inputs
+            ['startDate', 'endDate', 'lane', 'techNum'].forEach(name => {
+            let hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = name;
+            hiddenInput.value = document.querySelector(`[name="${name}"]`).value;
+            form.appendChild(hiddenInput);
+            });
+
+        document.body.appendChild(form);
+        form.submit();
+
+        } else if (format === 'pdf') {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('l', 'mm', 'a4'); // 'l' stands for landscape
+        
+        // Get the current date
+        let currentDate = new Date();
+        let formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '-' + currentDate.getDate().toString().padStart(2, '0') + '-' + currentDate.getFullYear();
+        
+        // Create a title string
+        let title = 'MCO TECHLOG ' + formattedDate;
+
+        // Add title to the PDF at position (15, 15) which is 15mm from left and 15mm from top
+        doc.setFontSize(18);
+        doc.text(title, 15, 15);
+        
+        // Move the table down a bit to avoid overlap with the title
+        doc.autoTable({ html: '#resultsTable', startY: 25 }); 
+
+        doc.save(title + '.pdf');
+        }
+    }
+</script>
 </body>
 </html>
