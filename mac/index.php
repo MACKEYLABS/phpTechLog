@@ -50,10 +50,6 @@
             width: 100%;
         }
 
-        .open-ticket {
-            background-color: yellow;
-        }
-
     </style>
 </head>
 
@@ -61,8 +57,8 @@
     <!-- Navigation bar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="/">
-                <img src="assets/support-ticket.png" alt="MCO Icon"> <!-- Make sure the path to your icon is correct -->
+            <a class="navbar-brand" href="/mac/index.php">
+                <img src="assets/support-ticket.png" alt="MCO Icon"> 
                 MCO TECH LOG
             </a>
             <div class="collapse navbar-collapse">
@@ -73,7 +69,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/path_to_reports.php">Reports</a>
+                        <a class="nav-link" href="/mac/reports.php">Reports</a>
                     </li>
                 </ul>
             </div>
