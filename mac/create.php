@@ -41,11 +41,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             break;
         }
 
+        // Adding new client to DB with prepared statement
+        $stmt = $connection->prepare("INSERT INTO techlog (dateOf, lane, reportTime, startTime, stopTime, reportProb, actualProb, actionTaken, techNum, skidata, isOpen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param('sssssssssss', $dateOf, $lane, $reportTime, $startTime, $stopTime, $reportProb, $actualProb, $actionTaken, $techNum, $skidata, $isOpen);
+        $result = $stmt->execute();
+
+        /*
         // Adding new client to DB
         $sql = "INSERT INTO techlog (dateOf, lane, reportTime, startTime, stopTime, reportProb, actualProb, 
         actionTaken, techNum, skidata, isOpen) " . "VALUES ('$dateOf', '$lane', '$reportTime', '$startTime', '$stopTime', 
         '$reportProb', '$actualProb', '$actionTaken', '$techNum', '$skidata', '$isOpen')";
         $result = $connection->query($sql);
+        */
 
         // Display error message if query fails
         if (!$result) {

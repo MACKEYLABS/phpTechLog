@@ -34,9 +34,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     $id = $_GET["id"];
 
+    /*
     //read the row of the selected client from the database table
     $sql = "SELECT * FROM techlog WHERE id=$id";
     $result = $connection->query($sql);
+    */
+
+    // Reading the row of the selected client from the database table
+    $stmt = $connection->prepare("SELECT * FROM techlog WHERE id=?");
+    $stmt->bind_param("i", $id); // "i" means integer
+    $stmt->execute();
+    $result = $stmt->get_result();
     $row = $result->fetch_assoc();
 
     if (!$row) {
@@ -84,15 +92,28 @@ else {
             break;
         }
 
+        /*
         // Adding new client to DB
         $sql = "UPDATE techlog " . 
             "SET dateOf = '$dateOf', lane = '$lane', reportTime = '$reportTime', startTime = '$startTime', 
             stopTime = '$stopTime', reportProb = '$reportProb', actualProb = '$actualProb', 
             actionTaken = '$actionTaken', techNum = '$techNum', skidata = '$skidata', isOpen = '$isOpen' " . 
             "WHERE id = $id";
-
         // Check to see if query was successfully ran    
         $result = $connection->query($sql);
+        */
+
+        $stmt = $connection->prepare(
+            "UPDATE techlog SET dateOf=?, lane=?, reportTime=?, startTime=?, 
+            stopTime=?, reportProb=?, actualProb=?, actionTaken=?, techNum=?, skidata=?, isOpen=? WHERE id=?"
+        );
+        $stmt->bind_param(
+            "ssssssssssii", 
+            $dateOf, $lane, $reportTime, $startTime, $stopTime, $reportProb, $actualProb, 
+            $actionTaken, $techNum, $skidata, $isOpen, $id
+        );
+        $result = $stmt->execute();
+        $stmt->close();
 
         if (!$result) {
             $errorMessage = "Invalid query: " . $connection->error;
