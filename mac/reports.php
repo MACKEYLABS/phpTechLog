@@ -130,13 +130,19 @@ if (isset($_POST['search'])) {
                 </li>
                 <!-- Link to creating a new tech log -->
                 <li class="nav-item">
-                    <a class="nav-link" href="/mac/newtechlog.php" onclick="return confirm('Are you sure you want to start a new tech log? This will move current records to the historical archive.');">Start New Techlog</a>
+                    <a class="nav-link" href="/mac/newtechlog.php" onclick="return confirm('Are you sure you want to start a new tech log? This will move current records to the historical archive.');">New Techlog</a>
                 </li>
                 <!-- Link to Reports -->
                 <li class="nav-item">
                     <a class="nav-link" href="/mac/reports.php">Reports</a>
                 </li>
-            </ul>
+                <!-- Add new users (only for Admin) -->
+                <?php
+                if($_SESSION['loggedin'] == 'admin') {
+                    echo '<li class="nav-item"><a class="nav-link" href="/mac/register.php">Register</a></li>';
+                }   
+                ?>
+                </ul>
             <!-- Navigation items on the right -->
             <ul class="navbar-nav ms-auto">
                 <!-- Logout button -->
@@ -147,6 +153,7 @@ if (isset($_POST['search'])) {
         </div>
         </div>
     </nav>
+
     <div class="container my-4">
     <h2>Search Reports</h2>
     <form action="/mac/reports.php" method="POST">
