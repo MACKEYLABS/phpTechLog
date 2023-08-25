@@ -1,6 +1,5 @@
 <?php include 'auth_check.php'; ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,11 +90,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/mac/reports.php">Reports</a>
                 </li>
-                <!-- Add new users -->
-                <li class="nav-item">
-                    <a class="nav-link" href="/mac/register.php">Register</a>
-                </li>
-            </ul>
+                <!-- Add new users (only for Admin) -->
+                <?php
+                if($_SESSION['loggedin'] == 'admin') {
+                    echo '<li class="nav-item"><a class="nav-link" href="/mac/register.php">Register</a></li>';
+                }   
+                ?>
+                </ul>
             <!-- Navigation items on the right -->
             <ul class="navbar-nav ms-auto">
                 <!-- Logout button -->

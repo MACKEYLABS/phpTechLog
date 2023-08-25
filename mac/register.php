@@ -93,39 +93,65 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             border-bottom: 2px solid #ddd;  /* Added an underline effect on hover */
         }
 
+        .logout-button {
+            background-color: #d43f00; /* You can choose any color */
+            border-radius: 5px;
+            padding: 5px 15px;
+            transition: background-color 0.3s ease; /* Smooth transition effect */
+        }
+
+        .logout-button:hover {
+            background-color: #b23600; /* A darker shade for hover effect */
+        }
+
         table {
             width: 100%;
         }
-
     </style>
 </head>
 <body>
-    <!-- Navigation bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/mac/index.php">
-                <img src="assets/support-ticket.png" alt="MCO Icon"> 
-                MCO TECH LOG
-            </a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ml-auto">
-                    <!-- Home button -->
-                    <li class="nav-item">
+   <!-- Navigation bar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/mac/index.php">
+            <img src="assets/support-ticket.png" alt="MCO Icon"> 
+            MCO TECH LOG
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <!-- Navigation items on the left -->
+            <ul class="navbar-nav">
+                <!-- Home button -->
+                <li class="nav-item">
                     <a class="nav-link" href="/mac/techlog.php">Home</a>
-                    </li>
-                    <!--  Link to creting new tech log -->
-                    <li class="nav-item">
-                    <a class="nav-link" href="/mac/newtechlog.php" onclick="return confirm('Are you sure you want to start a new tech log? This will move current records to the historical archive.');">Start New Techlog</a>
-                    </li>
-                    <!-- Link to Reports -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/mac/reports.php">Reports</a>
-                    </li>
+                </li>
+                <!-- Link to creating a new tech log -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/mac/newtechlog.php" onclick="return confirm('Are you sure you want to start a new tech log? This will move current records to the historical archive.');">New Techlog</a>
+                </li>
+                <!-- Link to Reports -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/mac/reports.php">Reports</a>
+                </li>
+                <!-- Add new users (only for Admin) -->
+                <?php
+                if($_SESSION['loggedin'] == 'admin') {
+                    echo '<li class="nav-item"><a class="nav-link" href="/mac/register.php">Register</a></li>';
+                }   
+                ?>
                 </ul>
-            </div>
+            <!-- Navigation items on the right -->
+            <ul class="navbar-nav ms-auto">
+                <!-- Logout button -->
+                <li class="nav-item ml-lg-3"> <!-- Added margin-left for some spacing -->
+                    <a class="nav-link logout-button" href="/mac/logout.php">Logout</a>
+                </li>
+            </ul>
+        </div>
         </div>
     </nav>
-
 
     <div class="container my-5">
         <div class="row justify-content-center">
