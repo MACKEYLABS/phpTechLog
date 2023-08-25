@@ -8,6 +8,6 @@ if (isset($_GET["id"])) {
     $connection->query($sql);
 }
 
-header("location: /mac/index.php");
+header("location: /mac/techlog.php");
 exit;
 ?>
