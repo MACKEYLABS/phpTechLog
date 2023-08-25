@@ -1,8 +1,5 @@
 <?php
-// Database connection
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
+include 'auth_check.php';
 include 'config.php';
 
 if ($connection->connect_error) {
@@ -25,7 +22,7 @@ if (!$connection->query($delete_closed_query)) {
     die("Error deleting closed tickets: " . $connection->error);
 }
 
-header("Location: /mac/index.php");
+header("Location: /mac/techlog.php");
 exit;
 ?>
 
