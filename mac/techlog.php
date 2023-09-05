@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
+        
         /* Updated Styling for the navbar */
         .navbar {
             background: linear-gradient(45deg, #0052D4, #65C7F7);
@@ -58,9 +59,20 @@
             background-color: #b23600; /* A darker shade for hover effect */
         }
 
+        /* Table header styling */
+        .table thead th {
+            background-color: gray;
+            color: white;
+        }
+
+        /* Every other row styling */
+        .table tbody tr:nth-child(even) {
+            background-color: #ced4da !important;
+        }
+
         table {
             width: 100%;
-        }
+        }    
     </style>
 </head>
 
@@ -110,7 +122,6 @@
 
     <div class="container my-5">
         <div class="container my-5">
-        <a class="btn btn-primary" href="/mac/create.php" role="button" style="background-color: green;">Create Ticket</a>
         <br>
         <table class="table">
             <thead>
@@ -154,8 +165,8 @@
                 echo "
                 <tr class='$rowClass'>
                     <td>
-                    " . ($row['isOpen'] == '1' ? '<span class="badge bg-warning">Open</span>' : '<span class="badge bg-success">Closed</span>') . "
-                    </td>
+                    " . ($row['isOpen'] == '1' ? '<span class="badge rounded-pill bg-warning">Open</span>' : '<span class="badge rounded-pill bg-danger">Closed</span>') . "
+                    </td>                          
                     <td>$row[dateOf]</td>
                     <td>$row[lane]</td>
                     <td>" . substr($row['reportTime'], 0, 5) . "</td>
@@ -178,6 +189,7 @@
                 
             </tbody>
         </table>
+        <a class="btn btn-primary" href="/mac/create.php" role="button" style="background-color: green;">Create Ticket</a>
     </div>
     <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script> 
